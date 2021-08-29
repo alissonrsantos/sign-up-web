@@ -6,9 +6,12 @@ import './style.scss';
 
 export default function Card({ usersSignUp }) {
   const history = useHistory();
+
   async function routerRedirect(id) {
     history.push(`/edit/${id}`);
   }
+
+  console.log(usersSignUp);
 
   async function handleDelete(userId) {
     window.confirm('Tem certeza que deseja excluir?');
@@ -24,6 +27,7 @@ export default function Card({ usersSignUp }) {
     <div className="container-card">
       {usersSignUp.map((user) => (
         <div className="card" key={user.id}>
+          <img src={user.image} alt={user.name} />
           <p>
             <strong>
               Nome:

@@ -41,7 +41,7 @@ ou
 yarn start
 ```
 
-O projeto irá rodar em localhost:3000. Depois é só iniciar o servidor para que as informações do usuário sejam carregadas no navegador.
+O projeto irá rodar em localhost:3000. Depois é só iniciar o servidor da [API](https://github.com/alissonrsantos/sign-up-api) para que as informações do usuário sejam carregadas no navegador.
 
 ### Funcionalidades
   - [ x ] Listar usuários
@@ -52,5 +52,5 @@ O projeto irá rodar em localhost:3000. Depois é só iniciar o servidor para qu
 ### &copy; Licença
 MIT
 
-Feito por Alisson Romão Santos <br />
-[LINKEDIN](https://linkedin.com/in/alissonrsantos)
+Feito por Alisson Romão Santos |
+[LINKEDIN](https://linkedin.com/in/alissonrsantos) :)

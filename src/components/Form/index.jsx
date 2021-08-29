@@ -2,6 +2,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
+import InputMask from 'react-input-mask';
 import api from '../../services/api';
 import './style.scss';
 
@@ -24,9 +25,11 @@ export default function Form(
     id,
   },
 ) {
-  const [nameUpdated, setNameUpdated] = useState('');
-  const [imageUpdated, setImageUpdated] = useState('');
-  const [birthDateUpdated, setBirthDateUpdated] = useState('');
+  const [userName, setUserName] = useState('');
+  const [userImage, setUserImage] = useState('');
+  const [userBirthDate, setUserBirthDate] = useState('');
+  const [userCode, setUserCode] = useState('');
+  const [disabled] = useState(true);
 
   const history = useHistory();
 
@@ -34,17 +37,18 @@ export default function Form(
     useEffect(() => {
       async function getUserById() {
         const response = await api.get(`/user/${id}`);
-        const [upUser] = response.data;
+        const [userData] = response.data;
 
-        setNameUpdated(upUser.name);
-        setImageUpdated(response.data.image);
-        setBirthDateUpdated(response.data.birthDate);
+        setUserCode(userData.id);
+        setUserName(userData.name);
+        setUserImage(userData.image);
+        setUserBirthDate(userData.birthDate);
       }
 
       getUserById();
     }, [id]);
   }
-
+  console.log(userImage);
   if (!id) {
     useEffect(() => {
       if (image) {
@@ -105,9 +109,9 @@ export default function Form(
 
     const response = await api.put('/users', {
       id,
-      name: nameUpdated,
-      image: imageUpdated,
-      birthDate: birthDateUpdated,
+      name: userName,
+      image: userImage,
+      birthDate: userBirthDate,
     });
 
     if (response.status === 200) {
@@ -128,8 +132,8 @@ export default function Form(
   return (
     <div className="sign-up">
       <h2>{id ? 'Editar Usuário' : 'Cadastrar Usuário'}</h2>
-      {image ? <img src={preview} alt={name} /> : <img src={newPreview} alt={name} />}
-      <form method="POST">
+      { image ? <img src={preview} alt={name} /> : <img src={newPreview} alt={name} />}
+      <form method="POST" encType="multipart/form-data">
         <button type="button" onClick={addImage}>
           Selecionar Imagem
           <input
@@ -138,7 +142,7 @@ export default function Form(
             name="image"
             ref={fileInputRef}
             accept="image/*"
-            defaultValue={id ? imageUpdated : ''}
+            defaultValue={id ? userImage : ''}
             onChange={(event) => {
               if (!id) {
                 const file = event.target.files[0];
@@ -158,6 +162,8 @@ export default function Form(
             }}
           />
         </button>
+        {id && <strong>Código</strong>}
+        {id && <input type="text" defaultValue={userCode} disabled={disabled} />}
         <strong>Nome</strong>
         <input
           type="text"
@@ -166,24 +172,25 @@ export default function Form(
             if (!id) {
               setName(event.target.value);
             } else {
-              setNameUpdated(event.target.value);
+              setUserName(event.target.value);
             }
           }}
           placeholder="Digite seu nome"
-          defaultValue={id ? nameUpdated : ''}
+          defaultValue={id ? userName : ''}
         />
         <strong>Data de Nascimento</strong>
-        <input
-          type="date"
+        <InputMask
+          type="text"
+          mask="99/99/9999"
           onChange={(event) => {
             if (!id) {
               setBirthDate(event.target.value);
             } else {
-              setBirthDateUpdated(event.target.value);
+              setUserBirthDate(event.target.value);
             }
           }}
+          defaultValue={id ? userBirthDate : ''}
           placeholder="Data de Nascimento"
-          defaultValue={id ? birthDateUpdated : ''}
         />
         <button type="submit" onClick={id ? handleUpdateUser : handleCreateUser}>{id ? 'Atualizar' : 'Enviar'}</button>
       </form>
