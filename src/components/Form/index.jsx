@@ -189,7 +189,7 @@ export default function Form(
               setUserBirthDate(event.target.value);
             }
           }}
-          defaultValue={id ? userBirthDate : ''}
+          value={id && userBirthDate}
           placeholder="Data de Nascimento"
         />
         <button type="submit" onClick={id ? handleUpdateUser : handleCreateUser}>{id ? 'Atualizar' : 'Enviar'}</button>
